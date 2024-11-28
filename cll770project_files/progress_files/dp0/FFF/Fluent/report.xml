@@ -1,0 +1,224 @@
+<FluentXMLReport>
+<version>
+Fluent
+Version: 2d, pbns, vof, sstkw, transient (2d, pressure-based, VOF, SST k-omega, transient)
+Release: 20.1.0
+Title: 
+</version>
+
+<Models>
+
+Models
+------
+
+   Model                        Settings                               
+   -----------------------------------------------------------------
+   Space                        2D                                     
+   Time                         Unsteady, Bounded 2nd-Order Implicit   
+   Viscous                      SST k-omega turbulence model           
+   Heat Transfer                Disabled                               
+   Solidification and Melting   Disabled                               
+   Species                      Disabled                               
+   Coupled Dispersed Phase      Disabled                               
+   NOx Pollutants               Disabled                               
+   SOx Pollutants               Disabled                               
+   Soot                         Disabled                               
+   Mercury Pollutants           Disabled                               
+   Structure                    Disabled                               
+
+</Models>
+
+<MaterialProperties>
+Material Properties
+-------------------
+
+   Material: toluene-liquid (fluid)
+
+      Property                        Units     Method     Value(s)   
+      -------------------------------------------------------------
+      Density                         kg/m3     constant   866        
+      Cp (Specific Heat)              j/kg-k    constant   1675       
+      Thermal Conductivity            w/m-k     constant   0.151      
+      Viscosity                       kg/m-s    constant   0.000586   
+      Molecular Weight                kg/kmol   constant   92.0702    
+      Thermal Expansion Coefficient   1/k       constant   0          
+      Speed of Sound                  m/s       none       #f         
+
+   Material: water-liquid (fluid)
+
+      Property                        Units     Method     Value(s)   
+      -------------------------------------------------------------
+      Density                         kg/m3     constant   998.2      
+      Cp (Specific Heat)              j/kg-k    constant   4182       
+      Thermal Conductivity            w/m-k     constant   0.6        
+      Viscosity                       kg/m-s    constant   0.001003   
+      Molecular Weight                kg/kmol   constant   18.0152    
+      Thermal Expansion Coefficient   1/k       constant   0          
+      Speed of Sound                  m/s       none       #f         
+
+   Material: oil (fluid)
+
+      Property                        Units     Method     Value(s)   
+      -------------------------------------------------------------
+      Density                         kg/m3     constant   1000       
+      Cp (Specific Heat)              j/kg-k    constant   1006.43    
+      Thermal Conductivity            w/m-k     constant   0.0242     
+      Viscosity                       kg/m-s    constant   0.00671    
+      Molecular Weight                kg/kmol   constant   28.966     
+      Thermal Expansion Coefficient   1/k       constant   0          
+      Speed of Sound                  m/s       none       #f         
+
+   Material: aluminum (solid)
+
+      Property               Units    Method     Value(s)   
+      ---------------------------------------------------
+      Density                kg/m3    constant   2719       
+      Cp (Specific Heat)     j/kg-k   constant   871        
+      Thermal Conductivity   w/m-k    constant   202.4      
+
+</MaterialProperties>
+
+<CellZoneConditions>
+Cell Zone Conditions
+--------------------
+
+   Zones
+
+      name          id   type    
+      ------------------------
+      fff_surface   2    fluid   
+
+   Setup Conditions
+
+      fff_surface
+
+         Condition       Value   
+         ---------------------
+         Frame Motion?   no      
+         Mesh Motion?    no      
+
+</CellZoneConditions>
+
+<BoundaryConditions>
+Boundary Conditions
+-------------------
+
+   Zones
+
+      name               id   type              
+      ---------------------------------------
+      waterinlet         5    velocity-inlet    
+      oilinlet           6    velocity-inlet    
+      outlet             7    pressure-outlet   
+      wall-fff_surface   8    wall              
+
+   Setup Conditions
+
+      waterinlet
+
+         Condition                  Value    
+         ---------------------------------
+         Velocity Magnitude (m/s)   0.0103   
+
+      oilinlet
+
+         Condition                  Value    
+         ---------------------------------
+         Velocity Magnitude (m/s)   0.0103   
+
+      outlet
+
+         Condition   Value   
+         -----------------
+
+      wall-fff_surface
+
+         Condition                  Value                                    
+         -----------------------------------------------------------------
+         Wall Motion                0                                        
+         Shear Boundary Condition   0                                        
+         Wall Surface Roughness     0                                        
+         Contact Angles             (((constant . 2.3561941) (profile  )))   
+
+</BoundaryConditions>
+
+<SolverSettings>
+Solver Settings
+---------------
+
+   Equations
+
+      Equation          Solved   
+      ------------------------
+      Flow              yes      
+      Volume Fraction   yes      
+      Turbulence        yes      
+
+   Numerics
+
+      Numeric                         Enabled   
+      ---------------------------------------
+      Absolute Velocity Formulation   yes       
+
+   Unsteady Calculation Parameters
+
+                                                      
+      ---------------------------------------------
+      Time Step (s)                   0.00017245529   
+      Max. Iterations Per Time Step   10              
+
+   Relaxation
+
+      Variable                    Relaxation Factor   
+      ---------------------------------------------
+      Density                     1                   
+      Body Forces                 1                   
+      Turbulent Kinetic Energy    0.8                 
+      Specific Dissipation Rate   0.8                 
+      Turbulent Viscosity         1                   
+
+   Linear Solver
+
+      Variable                    Solver Type   Termination Criterion   Residual Reduction Tolerance   
+      ----------------------------------------------------------------------------------------------
+      Flow                        F-Cycle       0.1                                                    
+      Turbulent Kinetic Energy    Flexible      0.1                     0.7                            
+      Specific Dissipation Rate   Flexible      0.1                     0.7                            
+
+   Pressure-Velocity Coupling
+
+      Parameter                                   Value     
+      ---------------------------------------------------
+      Type                                        Coupled   
+      Pseudo Transient                            no        
+      Flow Courant Number                         200       
+      Volume Fraction Courant Number              200       
+      Explicit momentum under-relaxation          0.75      
+      Explicit pressure under-relaxation          0.75      
+      Explicit volume fraction under-relaxation   0.75      
+
+   Discretization Scheme
+
+      Variable                    Scheme                
+      -----------------------------------------------
+      Pressure                    PRESTO!               
+      Momentum                    Second Order Upwind   
+      Volume Fraction             Compressive           
+      Turbulent Kinetic Energy    First Order Upwind    
+      Specific Dissipation Rate   First Order Upwind    
+
+   Solution Limits
+
+      Quantity                         Limit    
+      ---------------------------------------
+      Minimum Absolute Pressure        1        
+      Maximum Absolute Pressure        5e+10    
+      Minimum Temperature              1        
+      Maximum Temperature              5000     
+      Minimum Turb. Kinetic Energy     1e-14    
+      Minimum Spec. Dissipation Rate   1e-20    
+      Maximum Turb. Viscosity Ratio    100000   
+
+</SolverSettings>
+
+</FluentXMLReport>
